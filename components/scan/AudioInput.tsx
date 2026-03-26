@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback } from "react";
 import { useExtract } from "@/hooks/useExtract";
 import { SubmitButton } from "@/components/ui/SubmitButton";
 import { ErrorMessage } from "@/components/ui/ErrorMessage";
@@ -33,14 +33,12 @@ declare global {
 export function AudioInput() {
   const [transcript, setTranscript] = useState("");
   const [recording, setRecording] = useState(false);
-  const [supported, setSupported] = useState(true);
+  const [supported] = useState(() => {
+    if (typeof window === "undefined") return true;
+    return !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+  });
   const { loading, error, submit } = useExtract();
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
-
-  useEffect(() => {
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SR) setSupported(false);
-  }, []);
 
   const startRecording = useCallback(() => {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;

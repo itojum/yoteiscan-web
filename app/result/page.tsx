@@ -10,17 +10,20 @@ import { EventCard } from "@/components/result/EventCard";
 
 export default function ResultPage() {
   const router = useRouter();
-  const [result, setResult] = useState<ExtractResponse | null>(null);
+  const [result] = useState<ExtractResponse | null>(() => {
+    if (typeof window === "undefined") return null;
+    const stored = sessionStorage.getItem("yoteiscan_result");
+    if (!stored) return null;
+    try {
+      return JSON.parse(stored) as ExtractResponse;
+    } catch {
+      return null;
+    }
+  });
 
   useEffect(() => {
-    const stored = sessionStorage.getItem("yoteiscan_result");
-    if (!stored) { router.replace("/"); return; }
-    try {
-      setResult(JSON.parse(stored));
-    } catch {
-      router.replace("/");
-    }
-  }, [router]);
+    if (!result) router.replace("/");
+  }, [result, router]);
 
   if (!result) {
     return (
