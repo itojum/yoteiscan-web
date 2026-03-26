@@ -70,25 +70,6 @@ export default function HomePage() {
           <p className="text-lg max-w-xl mx-auto" style={{ color: "var(--muted)" }}>
             テキスト・画像・音声・リンク・ファイルから予定を自動抽出し、Googleカレンダーへ追加できます
           </p>
-
-          {/* Flow steps */}
-          <div className="flex items-center justify-center gap-2 mt-8 flex-wrap">
-            {["媒体を選択", "予定を入力", "解析", "カレンダーへ追加"].map((step, i, arr) => (
-              <div key={step} className="flex items-center gap-2">
-                <span className="flex items-center gap-2 bg-white rounded-full px-4 py-1.5 text-sm font-medium shadow-sm" style={{ color: "var(--foreground)" }}>
-                  <span className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold text-white" style={{ background: "var(--primary)" }}>
-                    {i + 1}
-                  </span>
-                  {step}
-                </span>
-                {i < arr.length - 1 && (
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4 flex-shrink-0" style={{ color: "var(--primary)" }}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 18l6-6-6-6" />
-                  </svg>
-                )}
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
