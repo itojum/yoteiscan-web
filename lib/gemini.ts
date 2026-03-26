@@ -33,17 +33,27 @@ const responseSchema: Schema = {
   required: ["events", "warnings"],
 } as Schema;
 
-const SYSTEM_PROMPT = `あなたは予定抽出の専門家です。与えられたコンテンツから予定・イベントを抽出してください。
+function buildSystemPrompt(now: Date): string {
+  const jstOffset = 9 * 60;
+  const jstMs = now.getTime() + (now.getTimezoneOffset() + jstOffset) * 60000;
+  const jst = new Date(jstMs);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const nowStr = `${jst.getFullYear()}-${pad(jst.getMonth() + 1)}-${pad(jst.getDate())}T${pad(jst.getHours())}:${pad(jst.getMinutes())}:00+09:00`;
+
+  return `あなたは予定抽出の専門家です。与えられたコンテンツから予定・イベントを抽出してください。
+
+現在日時（Asia/Tokyo）: ${nowStr}
 
 ルール:
-1. 日付・時刻が明確な場合のみ値を設定してください。「来週」「明後日」「午後」など相対的・曖昧な表現の場合は、startDateTime/endDateTimeを空文字列にしてください。
+1. 「明日」「来週」「明後日」「今週末」などの相対的な表現は、上記の現在日時を基準に解決してください。時刻が不明な場合のみstartDateTime/endDateTimeを空文字列にしてください。
 2. タイムゾーンはAsia/Tokyo（+09:00）を使用してください。例: "2026-04-01T10:00:00+09:00"
-3. 年が省略されている場合は現在年（${new Date().getFullYear()}年）として解釈してください。
+3. 年が省略されている場合は現在年（${jst.getFullYear()}年）として解釈してください。
 4. allDayが不明な場合はnullにしてください。
 5. 終日イベントの場合、startDateTime/endDateTimeは "YYYY-MM-DDT00:00:00+09:00" 形式にしてください。
 6. warningsはユーザーへの確認・補足メッセージとして書いてください（日本語・丁寧語）。システムの内部動作（「〇〇をnullにしました」等）は書かず、「〇〇が不明なため、カレンダーに登録する前にご確認ください」のようなユーザー向けの表現にしてください。
 7. 予定が見つからない場合はeventsを空配列にしてください。
 8. memoフィールドには備考・URL・追加情報などを入れてください。`;
+}
 
 export async function extractEvents(
   textContent: string,
@@ -55,7 +65,7 @@ export async function extractEvents(
       responseMimeType: "application/json",
       responseSchema,
     },
-    systemInstruction: SYSTEM_PROMPT,
+    systemInstruction: buildSystemPrompt(new Date()),
   });
 
   const parts: Part[] = [];
