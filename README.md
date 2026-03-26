@@ -1,36 +1,89 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# YoteiScan
 
-## Getting Started
+あらゆる媒体から予定を抽出し、Google カレンダーに登録できる Web アプリです。
 
-First, run the development server:
+テキスト・画像・音声・リンク・ファイルを入力すると、AI が予定を解析して Google カレンダー登録用のリンクを生成します。
+
+## 機能
+
+| 入力タイプ | 説明 |
+|----------|------|
+| **テキスト** | メール・チャット・メモなどをペーストして解析 |
+| **画像** | スクリーンショットやチラシをアップロード |
+| **音声** | マイクで話した内容をリアルタイム文字起こし |
+| **リンク** | Web ページの URL を入力してページ内容を解析 |
+| **ファイル** | PDF・TXT・MD ファイルをアップロード |
+
+- 解析は Google Gemini 2.5 Flash が実行
+- 抽出された予定ごとに Google カレンダー登録ボタンを表示
+- 認証・データ保存なし（セッションストレージのみ使用）
+- PWA 対応（ホーム画面へのインストール可）
+- レート制限: IP ごとに 1 時間あたり 5 回
+
+## セットアップ
+
+### 必要なもの
+
+- [Bun](https://bun.sh/) または Node.js 18+
+- [Google AI Studio](https://aistudio.google.com/apikey) の API キー
+
+### 手順
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
+# 依存関係のインストール
+bun install
+
+# 環境変数の設定
+cp .env.example .env.local
+# .env.local を編集して GEMINI_API_KEY を設定
+
+# 開発サーバー起動
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+ブラウザで http://localhost:3000 を開いてください。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 環境変数
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| 変数 | 説明 |
+|-----|------|
+| `GEMINI_API_KEY` | Google AI Studio の API キー（必須） |
 
-## Learn More
+## 開発
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+bun dev          # 開発サーバー起動
+bun build        # プロダクションビルド
+bun test         # テスト実行
+bun test:watch   # テスト監視モード
+bun lint         # ESLint 実行
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## テスト
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Vitest を使用した単体・統合テストが含まれています。
 
-## Deploy on Vercel
+```
+__tests__/
+  lib/
+    schemas.test.ts       # Zod スキーマ・isEventComplete
+    rateLimit.test.ts     # レート制限ロジック（フェイクタイマー使用）
+    calendarUrl.test.ts   # Google Calendar URL 生成
+    gemini.test.ts        # Gemini API ラッパー（モック使用）
+  api/
+    extract.test.ts       # API エンドポイント統合テスト
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+テスト実行時は `GEMINI_API_KEY` に自動でプレースホルダーが設定されるため、実際の API キーは不要です。
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 技術スタック
+
+- **フレームワーク**: Next.js 16 (App Router)
+- **UI**: React 19 / Tailwind CSS 4
+- **言語**: TypeScript 5
+- **AI**: Google Gemini 2.5 Flash (`@google/generative-ai`)
+- **スキーマ検証**: Zod 4
+- **PDF 解析**: pdf-parse 2
+- **音声入力**: Web Speech API（ブラウザネイティブ）
+- **テスト**: Vitest 4
+- **パッケージマネージャー**: Bun
