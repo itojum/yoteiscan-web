@@ -58,9 +58,38 @@ const INPUT_TYPES = [
   },
 ];
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "YoteiScan",
+  url: "https://yoteiscan.itojum.dev",
+  description:
+    "テキスト・画像・音声・リンク・ファイルから予定をAIで自動抽出し、Googleカレンダーにワンクリックで登録できるWebアプリ",
+  applicationCategory: "ProductivityApplication",
+  operatingSystem: "Web",
+  inLanguage: "ja",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "JPY",
+  },
+  featureList: [
+    "テキストから予定を自動抽出",
+    "画像・スクリーンショットから予定を認識",
+    "音声入力から予定を抽出",
+    "WebページのURLから予定を取得",
+    "PDF・TXTファイルから予定を抽出",
+    "Googleカレンダーへワンクリック登録",
+  ],
+};
+
 export default function HomePage() {
   return (
     <main className="flex-1">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Hero */}
       <section className="border-b py-16" style={{ background: "var(--primary-light)", borderColor: "var(--border)" }}>
         <div className="max-w-6xl mx-auto px-6 text-center">

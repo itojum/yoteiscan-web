@@ -3,9 +3,42 @@ import Link from "next/link";
 import { SwRegister } from "./_sw-register";
 import "./globals.css";
 
+const BASE_URL = "https://yoteiscan.itojum.dev";
+
 export const metadata: Metadata = {
-  title: "YoteiScan",
-  description: "あらゆる媒体から予定を登録できます",
+  metadataBase: new URL(BASE_URL),
+  title: {
+    default: "YoteiScan — AIでどんな媒体からでも予定を自動抽出",
+    template: "%s | YoteiScan",
+  },
+  description:
+    "テキスト・画像・音声・リンク・ファイルから予定をAIで自動抽出し、Googleカレンダーにワンクリックで登録。メールや会議メモ、チラシの予定もスマートに管理。",
+  keywords: [
+    "Googleカレンダー 自動登録",
+    "予定 自動抽出",
+    "スケジュール AI 読み取り",
+    "チラシ 予定 カレンダー",
+    "メール 予定 自動登録",
+    "AI スケジュール 抽出",
+  ],
+  alternates: {
+    canonical: BASE_URL,
+  },
+  openGraph: {
+    type: "website",
+    locale: "ja_JP",
+    url: BASE_URL,
+    siteName: "YoteiScan",
+    title: "YoteiScan — AIでどんな媒体からでも予定を自動抽出",
+    description:
+      "テキスト・画像・音声・リンク・ファイルから予定をAIで自動抽出し、Googleカレンダーにワンクリックで登録。",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "YoteiScan — AIでどんな媒体からでも予定を自動抽出",
+    description:
+      "テキスト・画像・音声・リンク・ファイルから予定をAIで自動抽出し、Googleカレンダーにワンクリックで登録。",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
