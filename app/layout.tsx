@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import Link from "next/link";
+import Script from "next/script";
 import { SwRegister } from "./_sw-register";
 import "./globals.css";
 
@@ -88,6 +89,12 @@ export default function RootLayout({
 
         {/* Page content */}
         <div className="flex-1 flex flex-col">{children}</div>
+
+        <Script
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon='{"token": "5650036191d94f6faf33e4600c7bf1a2"}'
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
