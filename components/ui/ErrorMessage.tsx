@@ -1,4 +1,8 @@
-export function ErrorMessage({ message }: { message: string }) {
+interface Props {
+  message: string;
+}
+
+export function ErrorMessage({ message }: Props) {
   return (
     <div className="rounded-xl p-3 text-sm flex items-start gap-2" style={{ background: "#fef2f2", color: "var(--error)", border: "1px solid #fecaca" }}>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4 flex-shrink-0 mt-0.5">

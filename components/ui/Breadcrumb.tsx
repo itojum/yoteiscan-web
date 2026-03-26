@@ -1,11 +1,13 @@
 import Link from "next/link";
 
-interface BreadcrumbItem {
-  label: string;
-  href?: string;
+interface Props {
+  items: {
+    label: string;
+    href?: string;
+  }[];
 }
 
-export function Breadcrumb({ items }: { items: BreadcrumbItem[] }) {
+export function Breadcrumb({ items }: Props) {
   return (
     <div className="flex items-center gap-2 text-sm" style={{ color: "var(--muted)" }}>
       {items.map((item, i) => (

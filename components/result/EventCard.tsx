@@ -19,7 +19,11 @@ function formatDateTime(isoString: string, allDay: boolean | null): string {
   }
 }
 
-export function EventCard({ event }: { event: Event }) {
+interface Props {
+  event: Event;
+}
+
+export function EventCard({ event }: Props) {
   const complete = isEventComplete(event);
 
   return (

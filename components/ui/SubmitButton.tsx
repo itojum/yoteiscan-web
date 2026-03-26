@@ -1,4 +1,9 @@
-export function SubmitButton({ loading, disabled }: { loading: boolean; disabled: boolean }) {
+interface Props {
+  loading: boolean;
+  disabled: boolean;
+}
+
+export function SubmitButton({ loading, disabled }: Props) {
   return (
     <button
       type="submit"
