@@ -106,7 +106,8 @@ export function AudioInput() {
         <button
           type="button"
           onClick={recording ? stopRecording : startRecording}
-          className="w-14 h-14 rounded-full flex items-center justify-center text-white shadow-md flex-shrink-0 transition-transform hover:scale-105 active:scale-95"
+          disabled={loading}
+          className="w-14 h-14 rounded-full flex items-center justify-center text-white shadow-md flex-shrink-0 transition-transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
           style={{ background: recording ? "#ef4444" : "var(--primary)" }}
         >
           {recording ? (
@@ -142,7 +143,8 @@ export function AudioInput() {
           onChange={(e) => setTranscript(e.target.value)}
           placeholder="録音すると、ここに文字起こし結果が表示されます..."
           rows={6}
-          className="w-full rounded-xl border p-4 text-sm resize-none focus:outline-none focus:ring-2"
+          disabled={loading}
+          className="w-full rounded-xl border p-4 text-sm resize-none focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed"
           style={{ borderColor: "var(--border)", background: "#fff", lineHeight: 1.7 }}
         />
       </div>

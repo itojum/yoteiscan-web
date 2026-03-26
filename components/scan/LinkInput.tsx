@@ -29,7 +29,8 @@ export function LinkInput() {
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder="https://example.com/event"
-          className="w-full rounded-xl border px-4 py-3 text-sm focus:outline-none focus:ring-2"
+          disabled={loading}
+          className="w-full rounded-xl border px-4 py-3 text-sm focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed"
           style={{ borderColor: "var(--border)", background: "#fff" }}
           required
         />

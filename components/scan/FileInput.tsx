@@ -43,11 +43,13 @@ export function FileInput() {
           background: dragging ? "var(--primary-light)" : "#fff",
           minHeight: 200,
           padding: "2rem",
+          opacity: loading ? 0.5 : 1,
+          cursor: loading ? "not-allowed" : "pointer",
         }}
-        onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
+        onDragOver={(e) => { if (loading) return; e.preventDefault(); setDragging(true); }}
         onDragLeave={() => setDragging(false)}
-        onDrop={handleDrop}
-        onClick={() => inputRef.current?.click()}
+        onDrop={(e) => { if (loading) return; handleDrop(e); }}
+        onClick={() => { if (!loading) inputRef.current?.click(); }}
       >
         <UploadCloud className="w-12 h-12" style={{ color: "var(--muted)" }} />
         <div className="text-center">
@@ -66,7 +68,7 @@ export function FileInput() {
         <div className="flex items-center gap-2 text-sm" style={{ color: "var(--muted)" }}>
           <Check className="w-4 h-4" style={{ color: "var(--primary)" }} />
           {file.name}
-          <button type="button" onClick={() => setFile(null)} className="ml-auto text-xs hover:underline">
+          <button type="button" onClick={() => setFile(null)} disabled={loading} className="ml-auto text-xs hover:underline disabled:opacity-50 disabled:cursor-not-allowed">
             削除
           </button>
         </div>

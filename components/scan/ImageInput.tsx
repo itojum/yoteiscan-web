@@ -44,11 +44,13 @@ export function ImageInput() {
           background: dragging ? "var(--primary-light)" : "#fff",
           minHeight: 220,
           padding: "2rem",
+          opacity: loading ? 0.5 : 1,
+          cursor: loading ? "not-allowed" : "pointer",
         }}
-        onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
+        onDragOver={(e) => { if (loading) return; e.preventDefault(); setDragging(true); }}
         onDragLeave={() => setDragging(false)}
-        onDrop={handleDrop}
-        onClick={() => inputRef.current?.click()}
+        onDrop={(e) => { if (loading) return; handleDrop(e); }}
+        onClick={() => { if (!loading) inputRef.current?.click(); }}
       >
         {preview ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -74,7 +76,7 @@ export function ImageInput() {
         <div className="flex items-center gap-2 text-sm" style={{ color: "var(--muted)" }}>
           <Check className="w-4 h-4" style={{ color: "var(--primary)" }} />
           {file.name}
-          <button type="button" onClick={() => { setFile(null); setPreview(null); }} className="ml-auto text-xs hover:underline">
+          <button type="button" onClick={() => { setFile(null); setPreview(null); }} disabled={loading} className="ml-auto text-xs hover:underline disabled:opacity-50 disabled:cursor-not-allowed">
             削除
           </button>
         </div>
