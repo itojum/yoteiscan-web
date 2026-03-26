@@ -1,10 +1,22 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Link from "next/link";
+import { SwRegister } from "./_sw-register";
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: "YoteiScan",
   description: "あらゆる媒体から予定を登録できます",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "YoteiScan",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#5ab5ab",
+  width: "device-width",
+  initialScale: 1,
 };
 
 function CalendarIcon() {
@@ -26,6 +38,8 @@ export default function RootLayout({
   return (
     <html lang="ja" className="h-full">
       <body className="min-h-full flex flex-col" style={{ background: "var(--background)" }}>
+        <SwRegister />
+
         {/* Top navigation */}
         <header className="border-b sticky top-0 z-10 bg-white" style={{ borderColor: "var(--border)" }}>
           <div className="max-w-6xl mx-auto px-6 h-14 flex items-center gap-3">
