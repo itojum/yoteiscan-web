@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { UploadCloud, Check } from "lucide-react";
 import { useExtract } from "@/hooks/useExtract";
 import { SubmitButton } from "@/components/ui/SubmitButton";
 import { ErrorMessage } from "@/components/ui/ErrorMessage";
@@ -48,9 +49,7 @@ export function FileInput() {
         onDrop={handleDrop}
         onClick={() => inputRef.current?.click()}
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-12 h-12" style={{ color: "var(--muted)" }}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-        </svg>
+        <UploadCloud className="w-12 h-12" style={{ color: "var(--muted)" }} />
         <div className="text-center">
           <p className="text-sm font-medium" style={{ color: "var(--foreground)" }}>クリックまたはドラッグ&ドロップ</p>
           <p className="text-xs mt-1" style={{ color: "var(--muted)" }}>PDF・TXT・MD 対応</p>
@@ -65,9 +64,7 @@ export function FileInput() {
       </div>
       {file && (
         <div className="flex items-center gap-2 text-sm" style={{ color: "var(--muted)" }}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4" style={{ color: "var(--primary)" }}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-          </svg>
+          <Check className="w-4 h-4" style={{ color: "var(--primary)" }} />
           {file.name}
           <button type="button" onClick={() => setFile(null)} className="ml-auto text-xs hover:underline">
             削除

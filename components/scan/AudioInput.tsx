@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
+import { Mic, Square } from "lucide-react";
 import { useExtract } from "@/hooks/useExtract";
 import { SubmitButton } from "@/components/ui/SubmitButton";
 import { ErrorMessage } from "@/components/ui/ErrorMessage";
@@ -109,14 +110,9 @@ export function AudioInput() {
           style={{ background: recording ? "#ef4444" : "var(--primary)" }}
         >
           {recording ? (
-            <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-              <rect x="6" y="6" width="12" height="12" rx="1" />
-            </svg>
+            <Square className="w-6 h-6" fill="currentColor" />
           ) : (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-6 h-6">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19 10v2a7 7 0 0 1-14 0v-2" />
-            </svg>
+            <Mic className="w-6 h-6" />
           )}
         </button>
         <div>
