@@ -1,5 +1,9 @@
 const store = new Map<string, { count: number; resetAt: number }>();
 
+export function _clearStore() {
+  store.clear();
+}
+
 const MAX_REQUESTS = 5;
 const WINDOW_MS = 60 * 60 * 1000; // 1 hour
 
