@@ -1,0 +1,75 @@
+import {
+  GoogleGenerativeAI,
+  type Part,
+  type Schema,
+} from "@google/generative-ai";
+import { ExtractResponseSchema, type ExtractResponse } from "./schemas";
+
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+
+const responseSchema: Schema = {
+  type: "object",
+  properties: {
+    events: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          title: { type: "string" },
+          startDateTime: { type: "string" },
+          endDateTime: { type: "string" },
+          allDay: { type: "boolean", nullable: true },
+          location: { type: "string", nullable: true },
+          memo: { type: "string", nullable: true },
+        },
+        required: ["title", "startDateTime", "endDateTime", "allDay"],
+      },
+    },
+    warnings: {
+      type: "array",
+      items: { type: "string" },
+    },
+  },
+  required: ["events", "warnings"],
+} as Schema;
+
+const SYSTEM_PROMPT = `あなたは予定抽出の専門家です。与えられたコンテンツから予定・イベントを抽出してください。
+
+ルール:
+1. 日付・時刻が明確な場合のみ値を設定してください。「来週」「明後日」「午後」など相対的・曖昧な表現の場合は、startDateTime/endDateTimeを空文字列にしてください。
+2. タイムゾーンはAsia/Tokyo（+09:00）を使用してください。例: "2026-04-01T10:00:00+09:00"
+3. 年が省略されている場合は現在年（${new Date().getFullYear()}年）として解釈してください。
+4. allDayが不明な場合はnullにしてください。
+5. 終日イベントの場合、startDateTime/endDateTimeは "YYYY-MM-DDT00:00:00+09:00" 形式にしてください。
+6. warningsには曖昧だった箇所・省略された情報・注意事項を記録してください（日本語で）。
+7. 予定が見つからない場合はeventsを空配列にしてください。
+8. memoフィールドには備考・URL・追加情報などを入れてください。`;
+
+export async function extractEvents(
+  textContent: string,
+  imageParts?: Part[]
+): Promise<ExtractResponse> {
+  const model = genAI.getGenerativeModel({
+    model: "gemini-2.5-flash",
+    generationConfig: {
+      responseMimeType: "application/json",
+      responseSchema,
+    },
+    systemInstruction: SYSTEM_PROMPT,
+  });
+
+  const parts: Part[] = [];
+
+  if (imageParts && imageParts.length > 0) {
+    parts.push(...imageParts);
+    parts.push({ text: "上記の画像から予定・イベントを抽出してください。" });
+  } else {
+    parts.push({ text: `以下のコンテンツから予定・イベントを抽出してください:\n\n${textContent}` });
+  }
+
+  const result = await model.generateContent({ contents: [{ role: "user", parts }] });
+  const responseText = result.response.text();
+
+  const parsed = JSON.parse(responseText);
+  return ExtractResponseSchema.parse(parsed);
+}
