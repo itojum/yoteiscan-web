@@ -119,6 +119,9 @@ export async function POST(request: NextRequest) {
           signal: AbortSignal.timeout(15000),
         });
         if (!response.ok) {
+          if (response.status === 429) {
+            console.error("[extract] Jina.ai rate limit exceeded:", url);
+          }
           return Response.json(
             { error: `URLの取得に失敗しました（HTTP ${response.status}）。` },
             { status: 400 }
