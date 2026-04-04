@@ -52,7 +52,8 @@ function buildSystemPrompt(now: Date): string {
 5. 終日イベントの場合、startDateTime/endDateTimeは "YYYY-MM-DDT00:00:00+09:00" 形式にしてください。
 6. warningsはユーザーへの確認・補足メッセージとして書いてください（日本語・丁寧語）。システムの内部動作（「〇〇をnullにしました」等）は書かず、「〇〇が不明なため、カレンダーに登録する前にご確認ください」のようなユーザー向けの表現にしてください。
 7. 予定が見つからない場合はeventsを空配列にしてください。
-8. memoフィールドには備考・URL・追加情報などを入れてください。`;
+8. memoフィールドには備考・URL・追加情報などを入れてください。
+9. startDateTimeは必ずendDateTime以前の日時にしてください。開始日時が終了日時より後になってはいけません。`;
 }
 
 export async function extractEvents(
