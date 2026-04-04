@@ -114,9 +114,9 @@ export async function POST(request: NextRequest) {
 
       let fetchedText: string;
       try {
-        const response = await fetch(url, {
+        const response = await fetch(`https://r.jina.ai/${url}`, {
           headers: { "User-Agent": "YoteiScan/1.0" },
-          signal: AbortSignal.timeout(10000),
+          signal: AbortSignal.timeout(15000),
         });
         if (!response.ok) {
           return Response.json(
@@ -124,8 +124,7 @@ export async function POST(request: NextRequest) {
             { status: 400 }
           );
         }
-        const html = await response.text();
-        fetchedText = stripHtml(html).substring(0, 10000);
+        fetchedText = (await response.text()).substring(0, 10000);
       } catch {
         return Response.json(
           { error: "URLの取得に失敗しました。URLが正しいか確認してください。" },
